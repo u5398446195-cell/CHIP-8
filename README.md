@@ -6,18 +6,18 @@ Le CHIP-8 est une machine virtuelle des années 70 : 4 Ko de mémoire, 16 regist
 
 ## État actuel
 
-✅ La ROM **IBM Logo** s'affiche.
+✅ Les **35 instructions** du CHIP-8 sont gérées, avec le clavier et les timers (60 Hz).
+✅ Le jeu **Dino Run** tourne.
 
-Instructions déjà gérées :
-
-| Opcode | Rôle |
+| Famille | Instructions |
 |---|---|
-| `00E0` | Effacer l'écran |
-| `1NNN` | Sauter à l'adresse `NNN` |
-| `6XNN` | `VX = NN` |
-| `7XNN` | `VX += NN` |
-| `ANNN` | `I = NNN` |
-| `DXYN` | Dessiner un sprite de `N` lignes en (`VX`, `VY`), avec détection de collision dans `VF` |
+| Écran | `00E0` effacer, `DXYN` dessiner un sprite (XOR + collision dans `VF`) |
+| Sauts et fonctions | `1NNN`, `BNNN`, `2NNN` / `00EE` (pile) |
+| Sauts conditionnels | `3XNN`, `4XNN`, `5XY0`, `9XY0` |
+| Registres | `6XNN`, `7XNN`, `ANNN`, `CXNN` (hasard) |
+| Calculs | `8XY0` à `8XY7`, `8XYE` |
+| Clavier | `EX9E`, `EXA1`, `FX0A` |
+| Timers et mémoire | `FX07`, `FX15`, `FX18`, `FX1E`, `FX29`, `FX33`, `FX55`, `FX65` |
 
 ## Lancer le projet
 
@@ -29,7 +29,33 @@ cd CHIP-8
 cargo run
 ```
 
-La ROM chargée est `roms/ibm.ch8` (chemin dans `src/main.rs`). `Échap` ferme la fenêtre.
+Le jeu lancé est `roms/dinorun.ch8` (chemin dans `src/main.rs`). `Échap` ferme la fenêtre.
+
+## ROMs
+
+| Fichier | Contenu |
+|---|---|
+| `roms/dinorun.ch8` | **Dino Run** — Andrezinrc · jeu de course sans fin : saute par-dessus les cactus |
+| `roms/ibm.ch8` | IBM Logo, la ROM de test classique |
+
+Dino Run vient du [CHIP-8 Archive](https://github.com/JohnEarnest/chip8Archive), sous licence CC0 (domaine public).
+
+### Contrôles
+
+| Touche | Action |
+|---|---|
+| `Espace` | Sauter (Dino Run) |
+| `Échap` | Quitter |
+
+Le pavé 16 touches du CHIP-8 est aussi placé à gauche du clavier, pour les autres jeux :
+
+```
+CHIP-8          Clavier (AZERTY)
+1 2 3 C         1 2 3 4
+4 5 6 D   →     A Z E R
+7 8 9 E         Q S D F
+A 0 B F         W X C V
+```
 
 ## Comment ça marche
 
@@ -43,20 +69,14 @@ La ROM chargée est `roms/ibm.ch8` (chemin dans `src/main.rs`). `Échap` ferme l
 src/
 ├── main.rs     → crée la machine, charge la ROM, ouvre la fenêtre
 ├── chip.rs     → la machine : mémoire, registres, police, fetch / execute
-└── window.rs   → la fenêtre (minifb), agrandie × 8
+└── window.rs   → la fenêtre (minifb) agrandie × 8, le clavier et les timers
 ```
 
 ## À faire
 
-- [ ] Fonctions : `2NNN`, `00EE` (pile)
-- [ ] Sauts conditionnels : `3XNN`, `4XNN`, `5XY0`, `9XY0`
-- [ ] Calculs : famille `8XY_`
-- [ ] Hasard : `CXNN`
-- [ ] Famille `FX__` (timers, police, décimal, sauvegarde des registres)
-- [ ] Clavier : `EX9E`, `EXA1`, `FX0A`
-- [ ] Timers à 60 Hz et son
+- [ ] Son : un bip tant que `sound_timer` > 0
 - [ ] Passer la [suite de tests de Timendus](https://github.com/Timendus/chip8-test-suite)
-- [ ] Faire tourner un vrai jeu (Pong, Brix, Tetris…)
+- [ ] Choisir la ROM au lancement (`cargo run -- roms/jeu.ch8`)
 
 ## Technologies
 
