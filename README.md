@@ -1,4 +1,7 @@
 # CHIP-8 en Rust
+<img width="476" height="258" alt="SCR-20261121-tzod" src="https://github.com/user-attachments/assets/1f669e10-f4f9-41b7-9258-cb21413f734e" />
+<img width="499" height="242" alt="SCR-20261121-tzsi" src="https://github.com/user-attachments/assets/bba4f6f3-c178-4b8a-895d-774d410e825c" />
+
 
 Un émulateur **CHIP-8** écrit en Rust, pour apprendre comment fonctionne un émulateur de l'intérieur.
 
